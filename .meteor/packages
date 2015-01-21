@@ -5,5 +5,5 @@
 # but you can also edit it by hand.
 
 meteor-platform
-autopublish
-insecure
+udondan:slick
+mrt:jquery-ui-bootstrap
