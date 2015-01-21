@@ -8,11 +8,12 @@ Session.set("carouselReady", false);
 Template.carousel.rendered = function(){
   console.log('[+] Carousel rendered');
 	$('#message-area').slick({
-		autoplay: true,
 		autoplaySpeed: 6000,
-    vertical: true,
+    infinite: true,
     slidesToShow: 1,
-    slidesToScroll: 1
+    adaptiveHeight: true,
+    arrows: false,
+    useCSS: false
 	});
   Session.set("carouselReady", true);
 }
@@ -90,6 +91,39 @@ Template.body.helpers({
     return messagesSubscription.ready();
   }  
 });
+
+// Extra Functions
+/*smsResizeText = function(newSMS) {
+  if (newSMS) {
+    $(newSMS).css({
+      'font-size': 25 + 'px' 
+    });
+    
+    $(newSMS).css({
+      'height': parseInt($('#message').css('height'))/0.775 + 'px'
+    });
+    
+    while ($(newSMS)[0].children[0].clientHeight > (parseInt($('#slider').css('height')) - parseInt($('#slider .overview li').css('padding-top')))) {
+      $(newSMS).css('font-size', parseInt($(newSMS).css('font-size')) - 1 + 'px')
+    }
+  }
+  else {
+    $('#slider .overview li').css({
+      'font-size': 25 + 'px' 
+    });
+    $('#slider .overview li').css({
+      'height': parseInt($('#message').css('height'))/0.775 + 'px'
+    });
+    
+    $("li").each(function(index){ 
+      while ($(this)[0].children[0].clientHeight > (parseInt($('#slider').css('height')) - parseInt($('#slider .overview li').css('padding-top')))) {
+        $(this).css('font-size', parseInt($(this).css('font-size')) - 1 + 'px')
+      }
+    });
+  }
+  
+};*/
+
 /* Meteor.subscribe("tasks");
 
   Template.body.helpers({
