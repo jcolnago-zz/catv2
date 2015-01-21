@@ -1,0 +1,27 @@
+body { height: 100%; margin: 0; padding: 0 }
+
+#map-canvas {
+	height: 100vh;
+}
+
+.message-box {
+	position: absolute;
+	margin: auto;
+	top: 10px;
+	right: 10px;
+	width: 40vh;
+	height: 20vh;
+	background: rgba(255,255,255,1)	
+}
+
+#message-area {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 70%;
+	height: 90%;
+}
+
+.slick-prev:before, .slick-next:before {
+	color: silver;
+}

@@ -1,0 +1,28 @@
+<head>
+  <title>Cat in the Map</title>
+	<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzevId2bOUHbxS-h42OGrQyfWyB96_1yM">
+	</script>
+</head>
+
+<body>
+  {{> map}}
+	<div class="message-box">
+    {{#if messagesReady }} <!-- check if messages have been loaded before rendering carousel -->
+		  {{> carousel}}
+    {{/if}}
+	</div>
+</body>
+
+<template name="map">
+	<div id="map-canvas"></div>
+</template>
+
+<template name="carousel">
+	<div id="message-area">
+	 	  {{#each messages}}
+        {{updateCarousel}}
+        {{startCarousel}}
+	 	  {{/each}}
+	</div>
+</template>
