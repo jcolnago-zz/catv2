@@ -92,7 +92,45 @@ Template.body.helpers({
   }  
 });
 
-// Extra Functions
+Template.body.events({
+  "click .button-sms": function(event) {
+    bootbox.dialog({
+      backdrop: false,
+      title: "Send a message or request a photo",
+      message:  '<div class="row">  ' +
+                  '<div class="col-md-12"> ' +
+                    '<form class="form-horizontal"> ' +
+                      '<div class="form-group"> ' +
+                        '<label class="col-md-4 control-label" for="name">Name</label> ' +
+                        '<div class="col-md-4 input"> ' +
+                          '<input id="name" name="name" type="text" placeholder="Your name" class="form-control input-md"> ' +
+                          '<span class="help-block">Here goes your name</span>' +
+                        '</div> ' +
+                      '</div> ' +
+                      '<div class="form-group"> ' +
+                        '<label class="col-md-4 control-label" for="message">Message</label> ' +
+                        '<div class="col-md-4 input"> ' +
+                          '<textarea id="message" name="message" placeholder="Your message" class="form-control input-md"></textarea>'+
+                        '</div>' +
+                      '</div>' +
+                    '</form>' + 
+                  '</div>' + 
+                '</div>',
+      buttons: {
+        success: {
+          label: "Send",
+          className: "btn-success",
+          callback: function () {
+            var name = $('#name').val();
+            var message = $("#message").val()
+            Meteor.call("addMessage", message + " - " + name, new Date());
+          }
+        }
+      }
+    });
+  }
+});
+
 /*smsResizeText = function(newSMS) {
   if (newSMS) {
     $(newSMS).css({

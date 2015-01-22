@@ -9,21 +9,21 @@ body { height: 100%; margin: 0; padding: 0 }
 	margin: auto;
 	top: 10px;
 	right: 10px;
-	width: 40vh;
-	height: 20vh;
+	width: 25vw;
+	height: 10vw;
 	background: rgba(255,255,255,1)	
 }
 
 #message-buttons {
-  width: 25%;
-  height: 34%;
+  width: 6vw;
+  height: 3.5vw;
   position: absolute;
-  bottom: 1%;
+  bottom: 0.1vw;
   right: inherit;
 }
 
-#button-sms {
-  width: 90%;
+.button-sms {
+  width: 80%;
   height: 100%;
   background: url('/images/sms_button.png') no-repeat;
   background-size: 100%;
@@ -32,12 +32,25 @@ body { height: 100%; margin: 0; padding: 0 }
   right: 0;
 }
 
+.modal-dialog{
+  width: 23vw;
+}
+
+.modal-body {
+  padding: 10px;
+}
+
+.input {
+  width: 60%;
+  left: 0;
+}
+
 #message-area {
 	position: absolute;
 	left: 10px;
-	width: 70%;
-	height: 70%;
-  margin: 5% 0 5% 0;
+	width: 17vw;
+	height: 7vw;
+  margin: auto;
 }
 
 .slick-prev:before, .slick-next:before {
@@ -46,10 +59,9 @@ body { height: 100%; margin: 0; padding: 0 }
 
 .slick-list {
   text-align: center;
-  margin: 15% 0 20% 0;
-  padding: 5px 0 5px 0;
+  margin: 4vw 0;
 }
 
 .slick-slide {
-  font-family: "Lucida Console";
+  font-size: 1.25em;
 }
