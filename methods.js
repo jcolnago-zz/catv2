@@ -15,6 +15,19 @@ Meteor.methods({
     Messages.find().fetch().forEach(function(item){
       Messages.remove({_id: item._id});
     });
+  },
+  addDatum: function (date, lat, lng, extra) {
+    Data.insert({
+      createdAt: date,
+      geo_lat: lat,
+      geo_lng: lng,
+      extra: extra
+    });
+  },
+  cleanData: function () {
+    Data.find().fetch().forEach( function (item) {
+      Data.remove({_id: item._id});
+    });
   }
 /* addTask: function (text) {
     //Make sure the user is logged in before inserting a task

@@ -6,7 +6,9 @@
 </head>
 
 <body>
-  {{> map}}
+  {{#if dataReady}}
+    {{> map}}
+  {{/if}}
 	<div class="message-box">
     {{#if messagesReady }} <!-- check if messages have been loaded before rendering carousel -->
 		  {{> carousel}}
@@ -19,6 +21,9 @@
 
 <template name="map">
 	<div id="map-canvas"></div>
+    {{#each data}}
+      {{addMapMarker}}
+    {{/each}}
 </template>
 
 <template name="carousel">
