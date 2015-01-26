@@ -7,3 +7,5 @@
 meteor-platform
 udondan:slick
 mrt:jquery-ui-bootstrap
+mrt:bootstrap-3
+mizzao:bootboxjs

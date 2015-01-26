@@ -1,8 +1,9 @@
 Meteor.methods({
-  addMessage: function (text, date) {
+  addMessage: function (date, text, author) {
     Messages.insert({
       createdAt: date,
       text: text,
+      author: author,
       display: true
     });
   },

@@ -4,6 +4,11 @@ messagesSubscription = Meteor.subscribe("messages");
 //Set session variable carouselReady that flags the rendering of the carousel's DOM
 Session.set("carouselReady", false);
 
+//Carousel hack
+var first = true;
+
+/*---------------CAROUSEL---------------*/
+
 //When carousel rendered, set options and flag
 Template.carousel.rendered = function(){
   console.log('[+] Carousel rendered');
@@ -50,17 +55,16 @@ Template.carousel.helpers({
         // If message is available, add before current slide
         // so that if the message had just appear, it will show again
         var current = $('#message-area').slickCurrentSlide();
-        if (current != 0) {
+        if (!first) {
           //console.log('[dbug] (not first) Adding message (' + parseInt(current-1) + ')');
-          $('#message-area').slickAdd('<div name="' + this._id + '">' + this.text + 
-            '</div>', parseFloat(current-1));
-          current++;
-        }
+          $('#message-area').slickAdd('<div name="' + this._id + '">' + this.text + ' - ' + this.author + '</div>', parseFloat(current), true);
+        } 
         else {
           //console.log('[dbug] (first) Adding message');
-          $('#message-area').slickAdd('<div name="' + this._id + '">'+this.text+'</div>');
-          current++;
+          $('#message-area').slickAdd('<div name="' + this._id + '">' + this.text + ' - ' + this.author + '</div>');
+          first = false;
         }
+        current++;
       }
     }
   },
@@ -73,6 +77,8 @@ Template.carousel.helpers({
   }
 });
 
+/*--------------MAP-------------*/
+
 // When the map DOM is rendered, initialize google maps
 Template.map.rendered = function() {
     if (! Session.get('map'))
@@ -83,6 +89,8 @@ Template.map.rendered = function() {
 Template.map.destroyed = function() {
     Session.set('map', false);
 }
+
+/*--------------BODY--------------*/
 
 // Helper functions used inside body
 Template.body.helpers({
@@ -123,44 +131,13 @@ Template.body.events({
           callback: function () {
             var name = $('#name').val();
             var message = $("#message").val()
-            Meteor.call("addMessage", message + " - " + name, new Date());
+            Meteor.call("addMessage", new Date(), message, name);
           }
         }
       }
     });
   }
 });
-
-/*smsResizeText = function(newSMS) {
-  if (newSMS) {
-    $(newSMS).css({
-      'font-size': 25 + 'px' 
-    });
-    
-    $(newSMS).css({
-      'height': parseInt($('#message').css('height'))/0.775 + 'px'
-    });
-    
-    while ($(newSMS)[0].children[0].clientHeight > (parseInt($('#slider').css('height')) - parseInt($('#slider .overview li').css('padding-top')))) {
-      $(newSMS).css('font-size', parseInt($(newSMS).css('font-size')) - 1 + 'px')
-    }
-  }
-  else {
-    $('#slider .overview li').css({
-      'font-size': 25 + 'px' 
-    });
-    $('#slider .overview li').css({
-      'height': parseInt($('#message').css('height'))/0.775 + 'px'
-    });
-    
-    $("li").each(function(index){ 
-      while ($(this)[0].children[0].clientHeight > (parseInt($('#slider').css('height')) - parseInt($('#slider .overview li').css('padding-top')))) {
-        $(this).css('font-size', parseInt($(this).css('font-size')) - 1 + 'px')
-      }
-    });
-  }
-  
-};*/
 
 /* Meteor.subscribe("tasks");
 
