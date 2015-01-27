@@ -1,5 +1,6 @@
 //Susbscribe to desired collection
 messagesSubscription = Meteor.subscribe("messages");
+dataSubscription = Meteor.subscribe("data");
 
 //Set session variable carouselReady that flags the rendering of the carousel's DOM
 Session.set("carouselReady", false);
@@ -11,7 +12,6 @@ var first = true;
 
 //When carousel rendered, set options and flag
 Template.carousel.rendered = function(){
-  console.log('[+] Carousel rendered');
 	$('#message-area').slick({
 		autoplaySpeed: 6000,
     infinite: true,
@@ -27,12 +27,10 @@ Template.carousel.rendered = function(){
 Template.carousel.helpers({
   // Returns all messages from database
 	messages: function() {
-    console.log('[+] messages was called');
     return Messages.find({});
   },
   // Adds or removes messages from the carousel according to database changes
   updateCarousel: function() {
-    console.log('[+] updateCarousel was called')
     if (Session.get("carouselReady")){
       // Checks if message is to be displayed
       if (!this.display) {
@@ -56,11 +54,9 @@ Template.carousel.helpers({
         // so that if the message had just appear, it will show again
         var current = $('#message-area').slickCurrentSlide();
         if (!first) {
-          //console.log('[dbug] (not first) Adding message (' + parseInt(current-1) + ')');
           $('#message-area').slickAdd('<div name="' + this._id + '">' + this.text + ' - ' + this.author + '</div>', parseFloat(current), true);
         } 
         else {
-          //console.log('[dbug] (first) Adding message');
           $('#message-area').slickAdd('<div name="' + this._id + '">' + this.text + ' - ' + this.author + '</div>');
           first = false;
         }
@@ -70,7 +66,6 @@ Template.carousel.helpers({
   },
   // Starts the caousel animation
   startCarousel: function() {
-    console.log('[+] startCarousel was called');
     if (Session.get("carouselReady")){
       $('#message-area').slickPlay();
     }
@@ -90,6 +85,26 @@ Template.map.destroyed = function() {
     Session.set('map', false);
 }
 
+//Helper functions for the map template
+Template.map.helpers({
+  data: function () {
+    return Data.find();
+  },
+  addMapMarker: function () {
+    if (Session.get('map')) {
+      var marker = {
+        createdAt: this.createdAt,
+        lat: this.geo_lat,
+        lng: this.geo_lng,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        data: this.extra,
+      }
+      gmaps.addMarker(marker);
+      gmaps.calcBounds();
+    }
+  }
+});
+
 /*--------------BODY--------------*/
 
 // Helper functions used inside body
@@ -97,7 +112,10 @@ Template.body.helpers({
   // Check if messages have been loaded
   messagesReady: function() {
     return messagesSubscription.ready();
-  }  
+  },
+  dataReady: function() {
+    return dataSubscription.ready();
+  }
 });
 
 Template.body.events({
