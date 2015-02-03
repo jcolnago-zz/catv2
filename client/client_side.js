@@ -8,6 +8,9 @@ Session.set("carouselReady", false);
 //Carousel hack
 var first = true;
 
+// Message queue
+var mq = [];
+
 /*---------------CAROUSEL---------------*/
 
 //When carousel rendered, set options and flag
@@ -91,16 +94,32 @@ Template.map.helpers({
     return Data.find();
   },
   addMapMarker: function () {
+    var icon_type = 'images/gps.svg';
     if (Session.get('map')) {
+      switch(this.extra.type) {
+        case 0:
+          break;
+        case 1:
+          icon_type = 'images/photo.svg';
+          break;
+        case 2:
+          icon_type = 'images/msg.svg';
+          break;
+        case 3:
+          icon_type = 'images/msg_photo.svg';
+          break;
+        default:
+          throw('[ERROR] not a valid data type');          
+      }
+
       var marker = {
         createdAt: this.createdAt,
         lat: this.geo_lat,
         lng: this.geo_lng,
-        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        icon: icon_type,
         data: this.extra,
       }
       gmaps.addMarker(marker);
-      gmaps.calcBounds();
     }
   }
 });
@@ -150,6 +169,7 @@ Template.body.events({
             var name = $('#name').val();
             var message = $("#message").val()
             Meteor.call("addMessage", new Date(), message, name);
+            mq.push(message + ' - ' + name);
           }
         }
       }
