@@ -8,9 +8,6 @@ Session.set("carouselReady", false);
 //Carousel hack
 var first = true;
 
-// Message queue
-var mq = [];
-
 /*---------------CAROUSEL---------------*/
 
 //When carousel rendered, set options and flag
@@ -169,7 +166,6 @@ Template.body.events({
             var name = $('#name').val();
             var message = $("#message").val()
             Meteor.call("addMessage", new Date(), message, name);
-            mq.push(message + ' - ' + name);
           }
         }
       }
