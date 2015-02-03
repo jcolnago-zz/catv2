@@ -1,5 +1,9 @@
+// Message queue
+var mq = [];
+
 Meteor.methods({
   addMessage: function (date, text, author) {
+    mq.push(text + ' - ' + author);
     Messages.insert({
       createdAt: date,
       text: text,
@@ -17,6 +21,13 @@ Meteor.methods({
     });
   },
   addDatum: function (date, lat, lng, extra) {
+    if (mq.length > 0) {
+      extra.messages = mq;
+      mq = [];
+      if (extra.type == 0) extra.type = 2;
+      if (extra.type == 1) extra.type = 3;
+    }
+
     Data.insert({
       createdAt: date,
       geo_lat: lat,
