@@ -138,26 +138,29 @@ Template.body.events({
   "click .button-sms": function(event) {
     bootbox.dialog({
       backdrop: false,
-      title: "Send a message or request a photo",
+      title: "Send your message",
       message:  '<div class="row">  ' +
                   '<div class="col-md-12"> ' +
                     '<form class="form-horizontal"> ' +
                       '<div class="form-group"> ' +
                         '<label class="col-md-4 control-label" for="name">Name</label> ' +
                         '<div class="col-md-4 input"> ' +
-                          '<input id="name" name="name" type="text" placeholder="Your name" class="form-control input-md"> ' +
-                          '<span class="help-block">Here goes your name</span>' +
+                          '<input id="name" name="name" type="text" placeholder="Your name" class="form-control input-md"' + 
+                            ' onKeyUp="$(\'#charsLeft\').text(75-$(\'#name\').val().length-$(\'#message\').val().length)"> ' +
                         '</div> ' +
                       '</div> ' +
                       '<div class="form-group"> ' +
                         '<label class="col-md-4 control-label" for="message">Message</label> ' +
                         '<div class="col-md-4 input"> ' +
-                          '<textarea id="message" name="message" placeholder="Your message" class="form-control input-md"></textarea>'+
+                          '<textarea id="message" name="message" placeholder="Your message" class="form-control input-md"' +
+                              'onKeyUp="$(\'#charsLeft\').text(75-$(\'#name\').val().length-$(\'#message\').val().length)"></textarea>'+
                         '</div>' +
                       '</div>' +
+                      '<span>You still have: <span id="charsLeft">75</span> letters left.</span>' +
                     '</form>' + 
                   '</div>' + 
                 '</div>',
+
       buttons: {
         success: {
           label: "Send",
@@ -165,73 +168,11 @@ Template.body.events({
           callback: function () {
             var name = $('#name').val();
             var message = $("#message").val()
-            Meteor.call("addMessage", new Date(), message, name);
+            HTTP.post('addMessage', {data:{text:message, author:name}},
+                     function(err, result){ if(err) alert('Your message is too long.'); });
           }
         }
       }
     });
   }
 });
-
-/* Meteor.subscribe("tasks");
-
-  Template.body.helpers({
-    tasks: function () {
-      if (Session.get("hideCompleted")) {
-        // If hide completed is checked, filter tasks
-        return Tasks.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
-      } else {
-        // Otherwise return all of the tasks
-        return Tasks.find({}, {sort: {createdAt: -1}});
-      }
-    },
-    hideCompleted: function () {
-      return Session.get("hideCompleted");
-    },
-    incompleteCount: function () {
-      return Tasks.find({checked: {$ne: true}}).count();
-    }
-  });
-  
-  Template.body.events({
-    "submit .new-task": function (event) {
-       // This function is called when the new task form is submitted
-       
-       var text = event.target.text.value;
-
-       Meteor.call("addTask", text);
-
-       //Clear form
-       event.target.text.value = "";
-
-       //prevent defaut form submit
-       return false;
-    },
-    "change .hide-completed input": function (event) {
-       Session.set("hideCompleted", event.target.checked);
-    }
-  });
-
-  Template.task.events({
-    "click .toggle-checked": function () {
-      //Set the checked proerty to the opposite of its current value
-      Meteor.call("setChecked", this._id, ! this.checked);
-    },
-    "click .delete": function () {
-      Meteor.call("deleteTask", this._id);
-    },
-    "click .toggle-private": function () {
-      Meteor.call("setPrivate", this._id, ! this.private);
-    }
-			
-  });
-
-  Template.task.helpers({
-    isOwner: function () {
-      return this.owner === Meteor.userId();
-    } 
-  });
-
-  Accounts.ui.config({
-    passwordSignupFields: "USERNAME_ONLY"
-  });*/
