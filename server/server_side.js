@@ -23,8 +23,7 @@ HTTP.methods({
         author: data.author,
         display: true
       });
-    }
-    this.setStatusCode(400);
+    } else this.setStatusCode(400);
   },
   'deleteText': function(data) {
     if (auth == data.auth) {
