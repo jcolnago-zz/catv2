@@ -9,7 +9,11 @@ Meteor.publish("data", function () {
 //Message queue
 var mq = [];
 
+// Authentication token
 var auth = '436174696e7468654d61704c49414a43';
+
+// Last request
+var rTime = new Date(1990, 06, 12, 8, 25, 0, 0);
 
 HTTP.methods({
   //No authentication: called from client side
@@ -25,6 +29,26 @@ HTTP.methods({
       });
     } else this.setStatusCode(400);
   },
+  'getNewMessages': function(data) {
+    if (auth == data.auth) {
+      var response = [];
+      var dict = {};
+      messages = Messages.find({"createdAt": { $gt : rTime }})
+      if (messages.length > 0) {
+        messages.forEach( function(message) {
+          dict['message'] = message.text + ' - ' + message.author;
+          dict['id'] = message._id;
+          response.push(dict);
+        });
+        rTime = new Date();    
+        return response;
+      }
+      this.setStatusCode(204); // No response
+      return 'No new messages';
+    }
+    this.setStatusCode(401);
+    return 'Unauthorized';
+   },
   'deleteText': function(data) {
     if (auth == data.auth) {
       Messages.update({_id: id}, {$set: {display: false}});    
