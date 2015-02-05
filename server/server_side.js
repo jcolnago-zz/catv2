@@ -51,7 +51,7 @@ HTTP.methods({
    },
   'deleteText': function(data) {
     if (auth == data.auth) {
-      Messages.update({_id: id}, {$set: {display: false}});    
+      Messages.update({_id: data.id}, {$set: {display: false}});    
     } else {
       this.setStatusCode(401);
       return 'Unauthorized';
